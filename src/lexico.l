@@ -24,8 +24,8 @@ extern int yylval;
 "VISAO TERMAL"          return(VISAO_TERMAL);
 "MAGNETISMO"            return(MAGNETISMO);
 "INVISIBILIDADE"        return(INVISIBILIDADE);
-[a-z0-9]*               { return(INVALIDO);}
-\n	                    { ++linha; return (FINAL_DE_LINHA);}
-"FIM"                   return (FIM);
+[a-z0-9]*               { return(INVALIDO); }
+\n	                    { ++linha; return (FINAL_DE_LINHA); }
+"FIM"                   return(FIM);
 .                       ;
 %%
