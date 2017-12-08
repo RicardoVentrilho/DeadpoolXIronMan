@@ -11,101 +11,107 @@ extern int linha;
 #define SUCESSO 0
 #define ERRO -1
 
-int yyerror(const char *mens);
+int yyerror(const char *mensagem);
 %}
-%start battle 
-%token GUERREIRO ATAQUE ESCUDO POCAO
-%token MAGO BOLADEFOGO CANALIZAR CURAR
-%token LADRAO FLECHA ESQUIVA ATADURA 
-%token INICIO END_OF_LINE FIM INVALIDO
-%left  GUERREIRO MAGO LADRAO INICIO END_OF_LINE FIM
+
+%start batalha 
+
+%token INICIO
+%token DEADPOOL
+%token ESPADINHA
+%token PONTARIA
+%token CURA_ACELERADA
+%token MESTRE_DAS_ARMAS
+%token VELOCIDADE
+%token IRONMAN
+%token ARMA_DE_FOTONS
+%token RAIO_DE_ENERGIA
+%token VISAO_TERMAL
+%token MAGNETISMO
+%token INVISIBILIDADE
+%token INVALIDO
+
+%left  DEADPOOL IRONMAN INICIO FINAL_DE_LINHA FIM
+
 %%
-battle    :	INICIO END_OF_LINE jogar END_OF_LINE
-		{
-			exit(0);
-		}
-		;
-jogar	: GUERREIRO comandosGuerreiro END_OF_LINE jogar |
+
+batalha    				:	INICIO FINAL_DE_LINHA jogar FINAL_DE_LINHA
+						{
+							exit(SUCESSO);
+						}
+						;
+
+jogar					: 	DEADPOOL comandos_do_deadpool FINAL_DE_LINHA jogar |
         
-        MAGO comandosMago END_OF_LINE jogar |
+							IRONMAN comandos_de_ironman FINAL_DE_LINHA jogar |
+					
+							fim
         
-        LADRAO comandosLadrao END_OF_LINE | fim
-        
-comandosGuerreiro : 
-       		ATAQUE 
-		{
-			printf("GUERREIRO ATAQUE    ");
-		} 
-		| 
-		ESCUDO 
-		{
-			printf("GUERREIRO ESCUDO    ");
-		} 
-		|
-		POCAO
-		{
-			printf("GUERREIRO POCAO     ");
-	        } 
-		|INVALIDO
-		{
-			printf("GUERREIRO INVALIDO  ");
-		} 
-		;
-comandosMago  : INVALIDO 
-		{
-			printf("MAGO      INVALIDO  ");
-		} 
-		|
-        	BOLADEFOGO
-        	{
-        		printf("MAGO      BOLADEFOGO");
-        	}
-		|
-		CANALIZAR 
-		{
-			printf("MAGO      CANALIZAR ");
-		}
-		|
-		CURAR 
-		{
-			printf("MAGO      CURAR     ");
-		} 
-		;
-comandosLadrao :  INVALIDO
-		{
-			printf("LADRAO    INVALIDO  ");
-		} 
-		|
-	 	FLECHA 
-		{
-			printf("LADRAO    FLECHA    ");
-		}
-		|
-		ESQUIVA 
-		{
-			printf("LADRAO    ESQUIVA   ");
-		}
-                |
-		ATADURA 
-		{
-			printf("LADRAO    ATADURA   ");
-		}
-		;
+comandos_do_deadpool 	: 
+						ESPADINHA 
+						{
+							printf("DEADPOOL ESPADINHA\n");
+						} 
+						| 
+						PONTARIA 
+						{
+							printf("DEADPOOL PONTARIA\n");
+						} 
+						|
+						CURA_ACELERADA
+						{
+							printf("DEADPOOL CURA_ACELERADA\n");
+							} 
+						|
+						MESTRE_DAS_ARMAS
+						{
+							printf("DEADPOOL MESTRE_DAS_ARMAS\n");
+						} 
+						|
+						VELOCIDADE
+						{
+							printf("DEADPOOL VELOCIDADE\n");
+						}
+						;
+comandos_de_ironman  	: 
+						ARMA_DE_FOTONS 
+						{
+							printf("IRONMAN ARMA_DE_FOTONS\n");
+						} 
+						| 
+						RAIO_DE_ENERGIA 
+						{
+							printf("IRONMAN RAIO_DE_ENERGIA\n");
+						} 
+						|
+						VISAO_TERMAL
+						{
+							printf("IRONMAN VISAO_TERMAL\n");
+							} 
+						|
+						MAGNETISMO
+						{
+							printf("IRONMAN MAGNETISMO\n");
+						} 
+						|
+						INVISIBILIDADE
+						{
+							printf("IRONMAN INVISIBILIDADE\n");
+						}
+						;
 fim: FIM
 %%
-/* codigo do usuario */
 
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	char arquivoJogador[30];
 	FILE *arquivo;
 
-	arquivo = fopen(argv[1],"r");
+	char* nome_do_arquivo = argv[1];
+	arquivo = fopen(nome_do_arquivo,"r");
 
 	if (!arquivo) 
 	{
-		printf("\nFalha ao abrir arquivo[%s] do jogador!\n",arquivoJogador);
+		printf("\nFalha ao abrir arquivo[%s] do jogador!\n", nome_do_arquivo);
 		return ERRO;
 	}
 	
@@ -116,16 +122,17 @@ main(int argc, char **argv)
 	do 
 	{
 		yyparse();
-	} while ( !feof(arquivo) );
+	} 
+	while ( !feof(arquivo) );
 	
 	fclose(arquivo);
 
 	return(SUCESSO);
 }
 
-int yyerror(const char *mens)
+int yyerror(const char *mensagem)
 {
-	fprintf(stderr, "Comando da linha %d inválido: %s\n\n", linha, mens);
+	fprintf(stderr, "Comando da linha %d inválido: %s\n\n", linha, mensagem);
 	return(1);
 }
 

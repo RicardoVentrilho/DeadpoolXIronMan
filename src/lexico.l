@@ -11,21 +11,21 @@ extern int yylval;
 %}
 
 %%
-"INICIO"     return(INICIO);
-"GUERREIRO"  return(GUERREIRO);
-"ATAQUE"     return(ATAQUE);
-"ESCUDO"     return(ESCUDO);
-"POCAO"      return(POCAO);
-"MAGO"       return(MAGO);
-"BOLADEFOGO" return(BOLADEFOGO);
-"CANALIZAR"  return(CANALIZAR);
-"CURAR"      return(CURAR);
-"LADRAO"     return(LADRAO);
-"FLECHA"     return(FLECHA);
-"ESQUIVA"    return(ESQUIVA);
-"ATADURA"    return(ATADURA);
-[a-z0-9]*    {return(INVALIDO);}
-\n	     { ++linha; return (END_OF_LINE);}
-"FIM"        return (FIM);
-.            ;
+"INICIO"                return(INICIO);
+"DEADPOOL"              return(DEADPOOL);
+"ESPADINHA"             return(ESPADINHA);
+"PONTARIA"              return(PONTARIA);
+"CURA ACELERADA"        return(CURA_ACELERADA);
+"MESTRE DAS ARMAS"      return(MESTRE_DAS_ARMAS);
+"VELOCIDADE"            return(VELOCIDADE);
+"IRONMAN"               return(IRONMAN);
+"ARMA DE FOTONS"        return(ARMA_DE_FOTONS);
+"RAIO DE ENERGIA"       return(RAIO_DE_ENERGIA);
+"VISAO TERMAL"          return(VISAO_TERMAL);
+"MAGNETISMO"            return(MAGNETISMO);
+"INVISIBILIDADE"        return(INVISIBILIDADE);
+[a-z0-9]*               { return(INVALIDO);}
+\n	                    { ++linha; return (FINAL_DE_LINHA);}
+"FIM"                   return (FIM);
+.                       ;
 %%

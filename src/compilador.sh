@@ -1,5 +1,5 @@
 #!/bin/bash
-# A simple script
+# Compilador bison e flex
 
 bison -d sintatico.y
 flex lexico.l
