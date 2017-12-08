@@ -103,7 +103,8 @@ main(int argc, char **argv)
 
 	arquivo = fopen(argv[1],"r");
 
-	if (!arquivo) {
+	if (!arquivo) 
+	{
 		printf("\nFalha ao abrir arquivo[%s] do jogador!\n",arquivoJogador);
 		return ERRO;
 	}
@@ -112,7 +113,8 @@ main(int argc, char **argv)
 	yyin = arquivo;
 	
 	// Realiza o parse para o arquivo
-	do {
+	do 
+	{
 		yyparse();
 	} while ( !feof(arquivo) );
 	
@@ -121,20 +123,13 @@ main(int argc, char **argv)
 	return(SUCESSO);
 }
 
-
-
-
-int
-yyerror(const char *mens)
+int yyerror(const char *mens)
 {
 	fprintf(stderr, "Comando da linha %d inválido: %s\n\n", linha, mens);
 	return(1);
 }
 
-
-
-int 
-yywrap(void) {	
+int yywrap(void) {	
 	// A funcao yywrap, deve retornar 0 para continuar o parse com outro arquivo
 	return(1);
 }
