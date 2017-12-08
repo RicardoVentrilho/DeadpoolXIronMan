@@ -96,7 +96,6 @@ comandos_do_deadpool 	:
 						PONTARIA 
 						{
 							aumente_pontaria();
-							cout << "PONTARIA ATUAL " << PONTARIA_ATUAL << "x" << endl;
 							verifique_se_houve_vencedor();
 						} 
 						|
@@ -214,7 +213,9 @@ void ataque_de_espadinha()
 
 	if (!ESTA_COM_MAGNETISMO)
 	{
-		HP_DO_IRONMAN -= 20000 * (0.15 * PONTARIA_ATUAL);
+		double porcetagem_dano = 0.15 * PONTARIA_ATUAL;
+		cout << 20000 * porcetagem_dano << " DE DANO (" << porcetagem_dano << "%) | ";
+		HP_DO_IRONMAN -= 20000 * porcetagem_dano;
 		volte_pontaria_para_o_normal();
 	}
 	else
@@ -227,7 +228,9 @@ void ataque_de_espadinha()
 void aumente_pontaria()
 {
 	cout << "DEADPOOL USA PONTARIA | ";
+
 	PONTARIA_ATUAL *= 2;
+	cout << "PONTARIA ATUAL " << PONTARIA_ATUAL << "x" << endl;
 }
 
 void use_cura_acelerada()
@@ -243,7 +246,9 @@ void ataque_de_mestre_das_armas()
 
 	if(!ESTA_COM_MAGNETISMO)
 	{
-		HP_DO_IRONMAN -= 20000 * (0.15 * PONTARIA_ATUAL);
+		double porcetagem_dano = (0.15 * PONTARIA_ATUAL);
+		cout << 20000 * porcetagem_dano << " DE DANO (" << porcetagem_dano << "%) | ";
+		HP_DO_IRONMAN -= 20000 * porcetagem_dano;
 		volte_pontaria_para_o_normal();
 	}
 	else
@@ -270,11 +275,20 @@ void ataque_de_arma_de_fotons()
 	}
 	else
 	{
-		HP_DO_DEADPOOL -= 20000 * (0.25 * (ESTA_COM_VISAO_TERMAL ? 2 : 1));
+		if (ESTA_COM_VISAO_TERMAL)
+		{
+			cout << " VISAO TERMAL ATIVA, ATAQUE DOBRADO | ";
+		}
+
+		double porcetagem_dano = (0.25 * (ESTA_COM_VISAO_TERMAL ? 2 : 1));
+		cout << 20000 * porcetagem_dano << " DE DANO (" << porcetagem_dano << "%) | ";
+
+		HP_DO_DEADPOOL -= 20000 * porcetagem_dano;
 		desative_visao_termal();
 
 		if (ESTA_COM_INVISIBILIDADE)
 		{
+			cout << " INVISIBILIDADE ATIVA | ";
 			desative_invisibilidade();
 			ataque_de_raio_de_energia();
 		}
@@ -292,11 +306,14 @@ void ataque_de_raio_de_energia()
 	}
 	else
 	{
-		HP_DO_DEADPOOL -= 20000 * (0.15 * (ESTA_COM_VISAO_TERMAL ? 2 : 1));
+		double porcetagem_dano = (0.15 * (ESTA_COM_VISAO_TERMAL ? 2 : 1));
+		cout << 20000 * porcetagem_dano << " DE DANO (" << porcetagem_dano << "%) | ";
+		HP_DO_DEADPOOL -= 20000 * porcetagem_dano;
 		desative_visao_termal();
 
 		if (ESTA_COM_INVISIBILIDADE)
 		{
+			cout << " INVISIBILIDADE ATIVA | ";
 			desative_invisibilidade();
 			ataque_de_raio_de_energia();
 		}
