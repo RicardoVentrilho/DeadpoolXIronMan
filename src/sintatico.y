@@ -11,6 +11,28 @@ extern int linha;
 #define SUCESSO 0
 #define ERRO -1
 
+int PONTARIA_ATUAL = 1;
+bool ESTA_VELOZ = false;
+
+float HP_DO_DEADPOOL = 20000.0;
+float HP_DO_IRONMAN = 20000.0;
+
+/*
+ * FUNÇÕES AUXILIARES
+ */
+void imprima_hp_do_ironman();
+void imprima_hp_do_deadpool();
+void volte_pontaria_para_o_normal();
+
+/*
+ * ATAQUES DO DEADPOOL, DIMINUEM O HP DO IRONMAN
+ */
+void ataque_de_espadinha();
+void aumente_pontaria();
+void use_cura_acelerada();
+void ataque_de_mestre_das_armas();
+void fique_veloz();
+
 int yyerror(const char *mensagem);
 %}
 
@@ -50,27 +72,36 @@ jogar					: 	DEADPOOL comandos_do_deadpool FINAL_DE_LINHA jogar |
 comandos_do_deadpool 	: 
 						ESPADINHA 
 						{
-							printf("DEADPOOL ESPADINHA\n");
-						} 
+							printf("DEADPOOL ATACA COM ESPADINHA | ");
+							ataque_de_espadinha();
+							imprima_hp_do_ironman();
+						}
 						| 
 						PONTARIA 
 						{
-							printf("DEADPOOL PONTARIA\n");
+							printf("DEADPOOL USA PONTARIA | ");
+							aumente_pontaria();
+							cout << "PONTARIA ATUAL " << PONTARIA_ATUAL << "x" << endl;
 						} 
 						|
 						CURA_ACELERADA
 						{
-							printf("DEADPOOL CURA_ACELERADA\n");
-							} 
+							cout << "DEADPOOL USA CURA ACELERADA + 5% DE HP | ";
+							use_cura_acelerada();
+							imprima_hp_do_deadpool();
+						} 
 						|
 						MESTRE_DAS_ARMAS
 						{
-							printf("DEADPOOL MESTRE_DAS_ARMAS\n");
+							cout << "DEADPOOL ATACA MESTRE DAS ARMAS | ";
+							ataque_de_mestre_das_armas();
+							imprima_hp_do_ironman();
 						} 
 						|
 						VELOCIDADE
 						{
-							printf("DEADPOOL VELOCIDADE\n");
+							cout << "DEADPOOL ESTA VELOZ | PROXIMO ATAQUE SE ESQUIVA" << endl;
+							fique_veloz();
 						}
 						;
 comandos_de_ironman  	: 
@@ -115,15 +146,13 @@ int main(int argc, char **argv)
 		return ERRO;
 	}
 	
-	// Seta o LEX para ler o arquivo1 atraves da variavel yyin 
 	yyin = arquivo;
 	
-	// Realiza o parse para o arquivo
 	do 
 	{
 		yyparse();
 	} 
-	while ( !feof(arquivo) );
+	while (!feof(arquivo));
 	
 	fclose(arquivo);
 
@@ -136,7 +165,46 @@ int yyerror(const char *mensagem)
 	return(1);
 }
 
-int yywrap(void) {	
-	// A funcao yywrap, deve retornar 0 para continuar o parse com outro arquivo
-	return(1);
+void imprima_hp_do_ironman() 
+{
+	cout.precision(7);
+	cout << "HP DO IRONMAN " << HP_DO_IRONMAN << endl;
+}
+
+void imprima_hp_do_deadpool()
+{
+	cout.precision(7);
+	cout << "HP DO DEADPOOL " << HP_DO_DEADPOOL << endl;
+}
+
+void volte_pontaria_para_o_normal()
+{
+	PONTARIA_ATUAL = 1;
+}
+
+void ataque_de_espadinha()
+{
+	HP_DO_IRONMAN *= 1 - (0.15 * PONTARIA_ATUAL);
+	volte_pontaria_para_o_normal();
+}
+
+void aumente_pontaria()
+{
+	PONTARIA_ATUAL *= 2;
+}
+
+void use_cura_acelerada()
+{
+	HP_DO_DEADPOOL *= 1 + 0.05;
+}
+
+void ataque_de_mestre_das_armas()
+{
+	HP_DO_IRONMAN *= 1 - (0.15 * PONTARIA_ATUAL);
+	volte_pontaria_para_o_normal();
+}
+
+void fique_veloz()
+{
+	ESTA_VELOZ = true;
 }
